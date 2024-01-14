@@ -15,8 +15,8 @@ public class ParserTest3
     int numExceptions = 0;
     int numErrors = 0;
     int numCorrect = 0;
-    String dirname = args[0];
-    Path dir = Paths.get(dirname);
+    //String dirname = args[0];
+    Path dir = Paths.get("examples/correct");
     try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
       for (Path file: stream) {
         // Run the symbol table and type checker for every file in the directory
