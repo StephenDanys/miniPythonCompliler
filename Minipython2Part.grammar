@@ -83,7 +83,7 @@ Productions
     
     	function = def identifier l_par argument r_par colon statement{-> New function(identifier, [argument.identifier_value], statement)};
 
-		argument{-> identifier_value*} = identifier_assign_value comma_id_assign_value*{-> [identifier_assign_value.identifier_value comma_id_assign_value.identifier_value]};
+		argument{-> identifier_value*} = identifier_assign_value? comma_id_assign_value*{-> [identifier_assign_value.identifier_value comma_id_assign_value.identifier_value]};
 		identifier_assign_value{-> identifier_value} = identifier assign_value?{-> New identifier_value(identifier, assign_value.value) };
     	comma_id_assign_value{->identifier_value} = comma identifier_assign_value?{-> identifier_assign_value.identifier_value};
     	assign_value{-> value} = assign value{-> value.value};
@@ -170,8 +170,8 @@ Abstract Syntax Tree
     programme = commands*;
     commands = {func} function | {stat} statement ;
     function =  identifier identifier_value* statement;
-    argument = [id1]:identifier_value [id2]:identifier_value*;
-    identifier_value = identifier value?;
+    argument = [id1]:identifier_value* [id2]:identifier_value*;
+    identifier_value = identifier value;
 
     statement = {if} comparison statement|
                 {while} comparison statement|
