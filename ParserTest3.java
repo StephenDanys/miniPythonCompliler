@@ -53,10 +53,10 @@ public class ParserTest3
     try
     {
       Parser parser =
-              new Parser(
-                      new Lexer(
-                              new PushbackReader(
-                                      new FileReader(file), 1024)));
+                                      new Parser(
+                                              new Lexer(
+                                                      new PushbackReader(
+                                                              new FileReader(file), 1024)));
 
       Start ast = parser.parse();
       System.out.println("Applying symbol table");

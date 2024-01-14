@@ -25,8 +25,8 @@ public class SymbolTable extends DepthFirstAdapter {
     public void inAAssignStatement(AAssignStatement node) {
         String vname = node.getIdentifier().getText();
 
-        // WE don't need to keep track of the type
-        variables.put(vname, new Variable(vname, ""));
+        //resolve the type of the variable
+        variables.put(vname, new Variable(vname, getExpressionType(node.getExpression())));
 
     }
 
@@ -155,6 +155,28 @@ public class SymbolTable extends DepthFirstAdapter {
             }
         }
         isReady = true;
+    }
+
+    public String getExpressionType(PExpression e){
+        if (e instanceof AArithmeticExpression
+                | e instanceof AMinExpression
+                | e instanceof AMaxExpression){
+            return "number";
+        }
+        if (e instanceof AIdentifierExpression){
+            String vname = ((AIdentifierExpression) e).getIdentifier().getText();
+            return this.getVariable(vname).type;
+        }
+        if (e instanceof AValueExpression){
+            AValueExpression aValueExpression = (AValueExpression) e;
+            if (aValueExpression.getValue() instanceof ANumberValue) {
+                return "number";
+            }
+        }
+        if (e instanceof AParExpression){
+            return getExpressionType(((AParExpression) e).getExpression());
+        }
+        return "not_number";
     }
 
     public FunctionCall getFuncCallObject(AFuncCallExpression expr){
