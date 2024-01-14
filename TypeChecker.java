@@ -166,14 +166,10 @@ public class TypeChecker extends DepthFirstAdapter
         PExpression right = node.getE2();
         int line = getBinopLine(node.getBinop());
         int pos = getBinopCol(node.getBinop());
-        //todo:consider adding addone and other expressions here
-//        if (left instanceof AOpenExpression | right instanceof AOpenExpression){
-//            showError(line , pos , "An arithmetic expression cannot have open operands" );
-//        }
-//        if (left instanceof ATypeExpression | right instanceof ATypeExpression){
-//            showError(line , pos , "An arithmetic expression cannot have type operands" );
-//        }
-        if (expressionIsNone(left) || expressionIsNone(right)){
+        
+        // checks if Arithmetic expressions(including addone and minusone) have the right number of operands
+        if (expressionIsNone(left) || (expressionIsNone(right) &&
+        		(!(node.getBinop() instanceof AAddoneBinop) || !(node.getBinop() instanceof AMinusBinop)))){
             showError(line , pos, "An arithmetic expression cannot have None value operands");
         }
 
