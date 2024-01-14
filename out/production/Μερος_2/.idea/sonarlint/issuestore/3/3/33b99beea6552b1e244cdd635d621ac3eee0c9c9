@@ -1,0 +1,11 @@
+
+J
+java:S1066T"/Merge this if statement with the enclosing one.(Ä­ø´ÿÿÿÿÿ
+‹
+java:S13198"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(áÕÆúÿÿÿÿ
+ˆ
+java:S1319<"mThe type of "expectedTypes" should be an interface such as "List" rather than the implementation "ArrayList".(³¸§ãÿÿÿÿÿ
+…
+java:S1319?"pThe type of "identifierValues" should be an interface such as "List" rather than the implementation "ArrayList".(ØÙíb
+0
+java:S1220""Move this file to a named package.

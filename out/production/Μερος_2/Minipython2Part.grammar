@@ -1,0 +1,228 @@
+/*Theofania Panopoulou 3190153*/
+/*Georgios- Stefanos Meidanis 3170107*/
+/*Giorgios Granisiotis 3190049*/
+Package minipython;
+
+Helpers
+	digit = ['0' .. '9'];
+	letter = ['a' .. 'z']|['A' .. 'Z']; 
+	cr = 13; 
+	lf = 10;
+	all = [0..127]; 
+	eol = lf | cr | cr lf ;
+	not_eol = [all - [cr + lf]];
+	d_quote = '"';
+	not_d_quote = [all - d_quote];
+    	s_quote = ''';
+	not_s_quote = [all - s_quote];
+
+Tokens
+	line_comment = '#' not_eol* eol; 
+
+	tab = 9;
+	assign = '=';
+	minus_assign = '-=';
+	div_assign = '/=';
+	l_par = '(';
+	r_par = ')';
+	l_br = '[';
+	r_br = ']';
+	comma=',';
+    dot = '.';
+
+	plus = '+';
+	dplus = '++';
+	dminus = '--';
+	minus = '-';
+	mult = '*';
+	div = '/';
+	mode = '%';
+	dmult = '**';
+
+	if = 'if';
+	in = 'in';
+	while = 'while';
+	for = 'for';
+	print = 'print';
+	return = 'return';
+	max = 'max';
+	min = 'min';
+	assert = 'assert';
+	def = 'def';
+	none = 'None';
+	len='len';
+	leq = '<=';
+	less = '<';
+	geq = '>=';
+	great = '>';
+	neq = '!=';
+	eq = '==';
+
+	true = 'true';
+	false = 'false';
+
+	and = 'and';
+	or = 'or';
+	not = 'not';
+
+	colon = ':';
+	quote = '"';
+	blank = (' ' | lf | cr);
+	integer_literal = digit+ | (digit+ '.' digit+);
+	identifier = letter (letter | digit | '_')*;
+	string_literal = d_quote [not_eol - d_quote]* d_quote | s_quote [not_eol - s_quote]* s_quote;
+
+Ignored Tokens
+	blank, line_comment;
+	
+Productions
+    	programme = commands*{-> New programme([commands])};
+	
+		commands ={func} function {-> New commands.func(function)}|
+                  {stat} statement {-> New commands.stat(statement)};
+    
+    	function = def identifier l_par argument r_par colon statement{-> New function(identifier, [argument.identifier_value], statement)};
+
+		argument{-> identifier_value*} = identifier_assign_value comma_id_assign_value*{-> [identifier_assign_value.identifier_value comma_id_assign_value.identifier_value]};
+		identifier_assign_value{-> identifier_value} = identifier assign_value?{-> New identifier_value(identifier, assign_value.value) };
+    	comma_id_assign_value{->identifier_value} = comma identifier_assign_value?{-> identifier_assign_value.identifier_value};
+    	assign_value{-> value} = assign value{-> value.value};
+	
+	statement = {if}tab* if comparison colon statement {-> New statement.if(comparison, statement)} |
+				{while}tab* while comparison colon statement {-> New statement.while(comparison, statement)}|
+				{for}tab* for [id1]: identifier in [id2]: identifier colon statement {-> New statement.for(id1, id2, statement)} |
+				{return}tab* return expression{-> New statement.return(expression)} |
+				{print}tab* print expression comma_expression* {-> New statement.print(expression, [comma_expression.expression])}|
+				{assign}tab* identifier assign expression {-> New statement.assign(identifier,expression)}|
+				{minus_assign}identifier minus_assign expression {-> New statement.minus_assign(identifier,expression)}|
+                {div_assign}identifier div_assign expression {-> New statement.div_assign(identifier,expression)}|
+                {assign_list}identifier l_br [ex1]: expression r_br assign [ex2]: expression {-> New statement.assign_list(identifier,ex1,ex2)}|
+				{assert}tab* assert expression comma_expression? {-> New statement.assert(expression, comma_expression.expression)}|
+				{func_call}tab* function_call {-> New statement.func_call(function_call)};	 
+					
+	comparison = disjunction {-> disjunction.comparison};
+ 
+	disjunction{-> comparison} = {or} disjunction or conjuction {-> New comparison.or(disjunction.comparison, conjuction.comparison)}|
+		                         {and} conjuction {-> conjuction.comparison};
+								 
+    conjuction {-> comparison} = {and} conjuction and negated {-> New comparison.and(conjuction.comparison, negated.comparison)} |
+		                        {not} negated {-> negated.comparison};
+								
+    negated {-> comparison} = {negated} not clause {-> New comparison.not(clause.comparison)} |
+	          {clause} clause {-> clause.comparison};
+			  
+	clause {-> comparison} = {great} [exp_l]: expression great [exp_r] : expression {-> New comparison.great(exp_l,exp_r)}|
+						{less} [exp_l]: expression less [exp_r]: expression {-> New comparison.less(exp_l,exp_r)}|
+						{geq} [exp_l]: expression geq [exp_r]: expression {-> New comparison.geq(exp_l,exp_r)}|
+						{leq} [exp_l]: expression leq [exp_r]: expression {-> New comparison.leq(exp_l,exp_r)}|
+						{neq} [exp_l]: expression neq [exp_r]: expression {-> New comparison.neq(exp_l,exp_r)}|
+						{eq} [exp_l]: expression eq [exp_r]: expression {-> New comparison.eq(exp_l,exp_r)}|
+						{true} true {-> New comparison.true()}|
+						{false} false {-> New comparison.false()};
+	 
+	expression = {sum} expression plus multipl {-> New expression.arithmetic(expression, New binop.plus(plus), multipl.expression)}|
+				{addone} expression dplus {-> New expression.arithm(expression, New binop.addone(dplus))}|
+				{minus} expression minus multipl {-> New expression.arithmetic(expression, New binop.minus(minus), multipl.expression)}|
+				{minusone} expression dminus {-> New expression.arithm(expression, New binop.minusone(dminus))}|
+				{multipl} multipl {-> multipl.expression};
+				
+	multipl{-> expression} = {mult} multipl mult power {-> New expression.arithmetic(multipl.expression, New binop.mult(mult), power.expression)}|
+			  {div} multipl div power {-> New expression.arithmetic(multipl.expression, New binop.div(div), power.expression)}|
+			  {modulo} multipl mode power {-> New expression.arithmetic(multipl.expression, New binop.modulo(mode), power.expression)}|
+			  {power} power {-> power.expression};
+			
+	power {->expression} = {mathpower} power dmult subscription {-> New expression.arithmetic(power.expression, New binop.pow(dmult), subscription.expression)}|
+			{subscription} subscription {-> subscription.expression};
+
+	subscription {->expression} = {subscription} identifier l_br expression r_br {-> New expression.subscription(identifier, expression)}|
+				   {func} func {-> func.expression};
+
+	func {-> expression} = {len} len l_par expression r_par {-> New expression.len(expression)}|
+		   {max} max l_par value comma_value+ r_par {-> New expression.max(value, [comma_value.value])}|
+	   	   {min} min l_par value comma_value+ r_par {-> New expression.min(value, [comma_value.value])}|
+	   	   {func} function_call{-> New expression.func_call(function_call)}|
+	   	   {par} par {-> par.expression}|
+	   	   {list_def} l_br expression comma_expression* r_br {-> New expression.list_def(expression, [comma_expression.expression])};
+    
+    comma_value{->value} = comma value {-> value};
+
+    par {-> expression} = {par} l_par expression r_par {-> expression}|
+	      {something} something {-> something.expression};
+
+    something {-> expression} = {value} value {-> New expression.value(value)}|
+				{identifier} identifier {-> New expression.identifier(identifier)};
+
+	value {-> value} = {fun_call}identifier dot function_call {-> New value.method(identifier, function_call)}|
+            {num}number {-> number.value}|
+            {string}string_literal {-> New value.string(string_literal)} |
+            {none} none {-> New value.none(none)};
+
+    number {->value} = integer_literal {-> New value.number(integer_literal)};
+	
+    function_call = identifier l_par arglist? r_par {-> New function_call(identifier, [arglist.expression])};	
+	
+	arglist {-> expression*} = expression comma_expression* {-> [expression comma_expression.expression]};
+				  
+	comma_expression{-> expression} = comma expression{->expression};	
+				  
+Abstract Syntax Tree
+
+    programme = commands*;
+    commands = {func} function | {stat} statement ;
+    function =  identifier identifier_value* statement;
+    argument = [id1]:identifier_value [id2]:identifier_value*;
+    identifier_value = identifier value?;
+
+    statement = {if} comparison statement|
+                {while} comparison statement|
+                {for}[id1]: identifier [id2]: identifier statement|
+                {return}expression|
+                {print} [exp1]:expression [exp2]:expression*|
+                {assign}identifier expression|
+                {minus_assign}identifier expression|
+                {div_assign}identifier expression|
+                {assign_list}identifier [ex1]: expression [ex2]: expression|
+                {assert}[exp1]:expression [exp2]:expression?|
+                {func_call} function_call;
+
+    expression = {arithmetic} [e1]:expression binop [e2]:expression |
+				 {arithm} [e1]:expression binop|
+                 {subscription} identifier expression |
+                 {func_call} function_call |
+                 {value} value |
+                 {identifier} identifier |
+				 {len} expression|
+                 {max} [v1]:value [v2]:value+|
+                 {min} [v1]:value [v2]:value+|				 
+                 {par} expression |
+                 {list_def} [e1]:expression [e2]:expression*;
+
+    binop = {plus} plus |
+			{addone} dplus|
+            {minus} minus |
+			{minusone} dminus|
+            {mult} mult |
+            {div} div |
+            {modulo} mode |
+            {pow} dmult ;
+
+    comparison = {and} [comp1]:comparison [comp2]:comparison |
+                 {or} [comp1]:comparison [comp2]:comparison |
+                 {not} comparison |
+                 {great} [lhs]: expression [rhs]: expression|
+                 {less} [lhs]: expression [rhs]: expression |
+                 {leq} [lhs]: expression [rhs]: expression |
+                 {geq} [lhs]: expression [rhs]: expression |
+                 {neq} [lhs]: expression [rhs]: expression |
+                 {eq} [lhs]: expression [rhs]: expression |
+                 {true}|
+                 {false};
+
+    function_call = identifier expression*;
+
+    value = {method} identifier function_call|{number}integer_literal|{string}string_literal|{none}none;
+
+
+	
+
+	

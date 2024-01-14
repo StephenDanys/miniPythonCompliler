@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="sablecc (2)">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/sablecc.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

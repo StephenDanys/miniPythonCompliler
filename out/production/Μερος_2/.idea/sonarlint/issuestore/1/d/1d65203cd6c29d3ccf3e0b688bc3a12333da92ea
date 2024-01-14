@@ -1,0 +1,34 @@
+
+»
+java:S6539"ŸSplit this â€œMonster Classâ€ into smaller and more specialized ones to reduce its dependencies on other classes from 22 to the maximum authorized 20 or less.(âŸƒğüÿÿÿÿ
+o
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ü¶Ûµ
+o
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(à­à´
+t
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(Á£²Šúÿÿÿÿ
+0
+java:S1220""Move this file to a named package.
+H
+java:S1199:"-Extract this nested code block into a method.(ÒÌâ–øÿÿÿÿ
+H
+java:S1199s"-Extract this nested code block into a method.(ÒÌâ–øÿÿÿÿ
+q
+java:S1149"VReplace the synchronized class "Hashtable" by an unsynchronized one such as "HashMap".(ÿƒÁÀøÿÿÿÿ
+l
+java:S1149"VReplace the synchronized class "Hashtable" by an unsynchronized one such as "HashMap".(ÿïú‹
+l
+java:S1149"VReplace the synchronized class "Hashtable" by an unsynchronized one such as "HashMap".(îà´
+r
+java:S1149·"VReplace the synchronized class "Hashtable" by an unsynchronized one such as "HashMap".(˜Õ ùÿÿÿÿ
+E
+java:S1197<"*Move the array designators [] to the type.(åéÎÑıÿÿÿÿ
+@	java:S106P"+Replace this use of System.out by a logger.(Ùô¶Ÿ
+E	java:S106T"+Replace this use of System.out by a logger.(ı£œáıÿÿÿÿ
+E
+java:S1197t"*Move the array designators [] to the type.(ÇÔ”¨ùÿÿÿÿ
+i
+java:S3776‡"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(“ÍÊ
+A
+java:S1197¥"*Move the array designators [] to the type.(€– Â
+A	java:S106¼"+Replace this use of System.out by a logger.(Ÿºİ¹
