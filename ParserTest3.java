@@ -20,6 +20,7 @@ public class ParserTest3
     try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
       for (Path file: stream) {
         // Run the symbol table and type checker for every file in the directory
+        System.out.println("-----------------------------------------"+file.getFileName()+ "-----------------------------------------");
         int result = runForFile(file.toString());
         System.out.print("Running compiler for " + file.getFileName()+ " ... ");
 

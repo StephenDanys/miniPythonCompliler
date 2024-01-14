@@ -1,2 +1,2 @@
 print 3 + 5 -2 + 4 + "kalispera"
-open( "12" , "22")
+add( "12" , "22")
