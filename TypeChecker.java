@@ -138,14 +138,6 @@ public class TypeChecker extends DepthFirstAdapter
                 node.getExpression() instanceof AMaxExpression){
             variables.put(vname,new Variable(vname,"number"));
         }
-        //todo:other types of expression here too
-//        else if(node.getExpression() instanceof AOpenExpression){
-//            variables.put(vname,new Variable(vname,"open"));
-//        }
-//        else if(node.getExpression() instanceof ATypeExpression){
-//            variables.put(vname,new Variable(vname,"type"));
-//        }
-        // Now this is a big fucking problem
         else if(node.getExpression() instanceof ASubscriptionExpression){
             variables.put(vname,new Variable(vname,"unknown"));
         }
